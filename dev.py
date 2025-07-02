@@ -6,6 +6,7 @@ import re
 import time
 import threading
 
+selected_PHP_version = None
 class ServiceControlPanel:
     def __init__(self, master):
         self.master = master
@@ -143,6 +144,51 @@ class ServiceControlPanel:
         except Exception as e:
             self.log_feedback(f"Error checking status for {process_name}: {e}", "red")
             return False
+        
+    def get_running_php_version(self):
+        command = "php -v"  # Command to check PHP version
+        try:
+            # Run the command without creating a window (Windows only)
+            process = subprocess.Popen(
+                command,
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                creationflags=subprocess.CREATE_NO_WINDOW
+            )
+            stdout, stderr = process.communicate()
+            
+            if process.returncode == 0:
+                # Extract version (first line of output)
+                version_line = stdout.decode('utf-8').split('(cli)')[0]
+                return version_line.strip()
+            else:
+                return f"Error: {stderr.decode('utf-8').strip()}"
+        except FileNotFoundError:
+            return "PHP is not installed or not in PATH."
+        
+    def get_service_description(self, service_name):
+        command = f'sc qdescription {service_name}'
+        try:
+            process = subprocess.Popen(
+                command,
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                creationflags=subprocess.CREATE_NO_WINDOW,
+                text=True
+            )
+            stdout, stderr = process.communicate()
+            
+            if process.returncode == 0:
+                # Extract the description (after "DESCRIPTION:")
+                description = stdout.split("DESCRIPTION:", 1)[-1].strip()
+                return description if description else "No description available."
+            else:
+                return f"Error: {stderr.strip() or 'Service not found.'}"
+        except Exception as e:
+            return f"Failed to query service: {e}"
+
 
     def update_status(self):
         """Updates the status labels for Apache and MySQL."""
@@ -150,7 +196,9 @@ class ServiceControlPanel:
         mysql_running = self.check_process_status("mysqld.exe")
 
         if apache_running:
-            self.apache_status_label.config(text="Status: Running", foreground="green")
+            time.sleep(2)
+            service = self.get_service_description("Apache24")
+            self.apache_status_label.config(text="Status: Running " + service, foreground="green")
         else:
             self.apache_status_label.config(text="Status: Stopped", foreground="red")
 
