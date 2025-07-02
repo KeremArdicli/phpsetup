@@ -103,7 +103,7 @@ LoadModule php_module "C:/PHP/php8X/php8apache2_4.dll"
 PHPIniDir "C:/PHP/php8X"
 AddHandler application/x-httpd-php .php
 
-# These are required for intl extension to run
+# These are required for intl extension to run. You may need to Load other dll files for the extensions you are using.
 LoadFile "C:\PHP\php8*\icudt**.dll"
 LoadFile "C:\PHP\php8*\icuin**.dll" 
 LoadFile "C:\PHP\php8*\icuio**.dll" 
@@ -113,9 +113,15 @@ LoadFile "C:\PHP\php8*\icuuc**.dll"
 - You can start Apache Server by running cmd `C:\Apache24\bin\httpd.exe" -X -f "C:\Apache24\conf\httpd_php82.conf""`
 - Once you are done, do not forget to kill the task via cmd: `taskkill /f /im httpd.exe >nul 2>&1`
 - Based the config file you feed, it will use different php version but the same www folder for your projects.
-- Instead of running the command each time, you can use the `apache.bat` in this repo, set the default php version to run each time, and load another version by running the command `apache.bat php8*` #apache.bat php84 will load up Apache with PHP8.4
+- Instead of running the command each time, you can use the `.bat` files and python script.
+  Place bat files in C:/Apache24 folder. Run them either with double click or run python script to get a basic Xampp like UI.
+  You can select PHP version and restart Apache for a quick version change.
+- Python script would require Admin priviliges to run Apache as a Service.
+- You can use pyinstaller with --uac-admin flag to make the compiled exe run with admin priviliges.
 
 ### Starting MySQL Server
 - You can start MySQL server by running the cmd `"C:\mysql\bin\mysqld.exe" --datadir="D:\mysql_data" --console`
 - Once you are done, do not forget to kill the task via cmd: `taskkill /f /im mysqld.exe >nul 2>&1`
-- You can use the `mysql.bat` file in the repo to run the server.
+- You can use `.bat` files in the repo to run the server. Or like Apache start, you can use python script in order to control status in a UI.
+- Python script would require Admin priviliges to run Apache as a Service.
+- You can use pyinstaller with --uac-admin flag to make the compiled exe run with admin priviliges.
