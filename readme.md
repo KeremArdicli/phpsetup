@@ -14,7 +14,7 @@ While I use C:/ as main directory for softwares, and D:/ for data files, you can
 
 ## Prerequisites
 
-- Windows 10 (Windows 11 is not tested but there is nothing restricting for things to work)
+- Windows 10 or Windows 11
 - Administrator privileges
 - Downloaded software:
   - Apache 2.4 (from [Apache Lounge](https://www.apachelounge.com/download/))
@@ -49,6 +49,7 @@ C:/
    Define SRVROOT "C:/Apache24"
    ServerRoot "${SRVROOT}"
    Listen 8080  # Change if 80 is occupied
+3. Register Apache as a service by running the command as admin : `C:\Apache24\bin\httpd.exe -k install -n "Apache24"`
 
 ### 2. Install PHP Versions
 1. For each PHP version (8.1, 8.2, 8.3):
