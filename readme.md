@@ -66,6 +66,16 @@ extension=pdo_mysql
 ...
 extension=intl ;intl extension is a bit problemmatic as it relies on external libararies. We will LoadFiles in Apache
 ```
+
+4. To resolve cURL error 60 on our local development environment :
+
+Download the latest ‘cacert.pem’ file from the official cURL website or directly from http://curl.haxx.se/ca/cacert.pem
+Save this file to a directory on your server. For WAMP, it could be “C:\wamp64\bin\php\cacert.pem”, and for XAMPP, “C:\PHP\cacert.pem”.
+Edit and save php.ini files for each PHP version to include the path to the “cacert.pem” file. 
+```ini
+curl.cainfo = "C:\PHP\cacert.pem"
+```
+
 ### 3. Configure Version Switching
 The batch script (apache_start.bat) handles:
 
